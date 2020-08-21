@@ -52,6 +52,9 @@ jobs:
           java-version: 11
       - name: Build with Maven
         shell: bash
+        run: mvn -T2 -B --settings .github/mvn-settings.xml -Dno-native -Dformat.skip -Dquickly=true install
+      - name: Test with Maven
+        shell: bash
         run: mvn -T2 -B --settings .github/mvn-settings.xml -Dno-native -Dformat.skip -pl integration-tests/maven -Dtest=JarRunnerIT -Dquickly=true test
       - name: Prepare failure archive (if maven failed)
         if: failure()
