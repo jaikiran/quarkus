@@ -46,6 +46,44 @@ import io.quarkus.utilities.JavaBinFinder;
 @DisableForNative
 public class JarRunnerIT extends MojoTestBase {
 
+    /**
+     * Tests that a Quarkus project builds fine if the project is hosted in a directory
+     * path that contains non-ASCII characters
+     * 
+     * @throws MavenInvocationException
+     * @throws IOException
+     * @see <a href="https://github.com/quarkusio/quarkus/issues/11511"/>
+     */
+    @Test
+    public void testNonAsciiDir() throws Exception {
+        final File testDir = initProject("projects/classic", "projects/ěščřžýáíéůú");
+        final RunningInvoker running = new RunningInvoker(testDir, false);
+
+        final MavenProcessInvocationResult result = running.execute(Arrays.asList("install", "-DskipTests"),
+                Collections.emptyMap());
+        await().atMost(1, TimeUnit.MINUTES).until(() -> result.getProcess() != null && !result.getProcess().isAlive());
+        assertThat(running.log()).containsIgnoringCase("BUILD SUCCESS");
+        running.stop();
+
+        final Path jar = testDir.toPath().toAbsolutePath()
+                .resolve(Paths.get("target/acme-1.0-SNAPSHOT-runner.jar"));
+        File output = new File(testDir, "target/output.log");
+        output.createNewFile();
+
+        Process process = doLaunch(jar, output).start();
+        try {
+            // Wait until server up
+            dumpFileContentOnFailure(() -> {
+                await().pollDelay(1, TimeUnit.SECONDS)
+                        .atMost(1, TimeUnit.MINUTES).until(() -> DevModeTestUtils.getHttpResponse("/app/hello/package", 200));
+                return null;
+            }, output, ConditionTimeoutException.class);
+        } finally {
+            process.destroy();
+        }
+
+    }
+
     @Test
     public void testThatJarRunnerConsoleOutputWorksCorrectly() throws MavenInvocationException, IOException {
         File testDir = initProject("projects/classic", "projects/project-classic-console-output");
