@@ -94,7 +94,7 @@ public class MutinyTest {
                     System.out.println(new Date() + " " + "Received emitter " + uniEmitter);
                     List<Pet> pets = new CopyOnWriteArrayList<>();
                     eventSource.register(event -> {
-                        System.out.println(new Date() + " " + "Received event " + event.getId());
+                        System.out.println(new Date() + " " + "Received event " + event.getId() + " " + event);
                         Pet pet = event.readData(Pet.class, MediaType.APPLICATION_JSON_TYPE);
                         System.out.println(new Date() + " " + "Received pet " + pet);
                         pets.add(pet);
