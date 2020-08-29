@@ -144,7 +144,7 @@ jobs:
         shell: bash
         run: tar -xzf maven-repo.tgz -C ~
       - name: Build with Maven
-        run: eval mvn $JVM_TEST_MAVEN_OPTS install ${{ matrix.java.maven_args}}
+        run: eval mvn $JVM_TEST_MAVEN_OPTS install ${{ matrix.java.maven_args}} -Dtest=MutinyTest#testSSE
       - name: Prepare failure archive (if maven failed)
         if: failure()
         shell: bash
