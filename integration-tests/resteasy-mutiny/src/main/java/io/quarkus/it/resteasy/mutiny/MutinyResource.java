@@ -1,6 +1,7 @@
 package io.quarkus.it.resteasy.mutiny;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -66,7 +67,7 @@ public class MutinyResource {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     public Multi<Pet> sse() {
-        System.out.println("Called Pets");
+        System.out.println(new Date() + " Called Pets");
         return service.getMorePets();
     }
 

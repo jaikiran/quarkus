@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.get;
 import static org.hamcrest.CoreMatchers.is;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -86,19 +87,28 @@ public class MutinyTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:" + RestAssured.port + "/mutiny/pets");
         try (SseEventSource eventSource = SseEventSource.target(target).build()) {
+            System.out.println(new Date() + " " + "Created SSE source");
             Uni<List<Pet>> petList = Uni.createFrom().emitter(new Consumer<UniEmitter<? super List<Pet>>>() {
                 @Override
                 public void accept(UniEmitter<? super List<Pet>> uniEmitter) {
+                    System.out.println(new Date() + " " + "Received emitter " + uniEmitter);
                     List<Pet> pets = new CopyOnWriteArrayList<>();
                     eventSource.register(event -> {
+                        System.out.println(new Date() + " " + "Received event " + event.getId());
                         Pet pet = event.readData(Pet.class, MediaType.APPLICATION_JSON_TYPE);
+                        System.out.println(new Date() + " " + "Received pet " + pet);
                         pets.add(pet);
+                        System.out.println(new Date() + " " + "Total pets " + pets.size());
                         if (pets.size() == 5) {
+                            System.out.println(new Date() + " " + "Completed pets " + pets);
                             uniEmitter.complete(pets);
                         }
                     }, ex -> {
+                        System.out.println(new Date() + " " + "Failing pets " + pets);
+                        ex.printStackTrace(System.out);
                         uniEmitter.fail(new IllegalStateException("SSE failure", ex));
                     });
+                    System.out.println(new Date() + " " + "Opening SSE source");
                     eventSource.open();
 
                 }
