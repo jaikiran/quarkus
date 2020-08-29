@@ -66,6 +66,7 @@ public class MutinyResource {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     public Multi<Pet> sse() {
+        System.out.println("Called Pets");
         return service.getMorePets();
     }
 
