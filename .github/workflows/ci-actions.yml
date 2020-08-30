@@ -44,6 +44,7 @@ jobs:
         run: sleep 30
   build-jdk11:
     name: "JDK 11 Build"
+    if: false
     runs-on: ubuntu-latest
     # Skip draft PRs and those with WIP in the subject, rerun as soon as its removed
     if: "github.event_name != 'pull_request' || ( \
@@ -134,15 +135,9 @@ jobs:
         with:
           java-version: ${{ matrix.java.java-version }}
           release: ${{ matrix.java.release }}
-
-      - name: Download Maven Repo
-        uses: actions/download-artifact@v1
-        with:
-          name: maven-repo
-          path: .
-      - name: Extract Maven Repo
-        shell: bash
-        run: tar -xzf maven-repo.tgz -C ~
+      - name: Quick Build
+        run: |
+          mvn -e -B -DskipTests -DskipITs -Dno-format -DskipDocs clean install
       - name: Build with Maven
         run: eval mvn $JVM_TEST_MAVEN_OPTS install ${{ matrix.java.maven_args}} -Dtest=MutinyTest
       - name: Prepare failure archive (if maven failed)
