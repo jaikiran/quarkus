@@ -56,6 +56,12 @@ public class SomeService {
                 new Pet().setName("indy").setKind("dog"),
                 new Pet().setName("plume").setKind("dog"),
                 new Pet().setName("titi").setKind("bird"),
-                new Pet().setName("rex").setKind("mouse"));
+                new Pet().setName("rex").setKind("mouse"))
+                .emitOn(executor)
+                .onCompletion().invoke(() -> System.out.println("Server Side - Completing stream"))
+                .onItem().invoke(it -> System.out.println("Server Side - Emitting " + it.getName()))
+                .onFailure().invoke(f -> System.out.println("Server Side - Failed with " + f))
+                .on().request(l -> System.out.println("Got request: " + l))
+                .onSubscribe().invoke(l -> System.out.println("Got subscription: " + l));
     }
 }
