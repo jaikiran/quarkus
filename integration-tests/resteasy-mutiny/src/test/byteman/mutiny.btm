@@ -64,3 +64,29 @@ DO
    traceln(currTime.toString() + "[" + currThread.toString() + "] " + " serverHelper is " + $0.serverHelper + " on " + $0);
    traceStack();
 ENDRULE
+
+
+RULE ResteasyProviderFactory#getInstance
+CLASS org.jboss.resteasy.spi.ResteasyProviderFactory
+METHOD getInstance
+AT LINE 126
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " provider factory is " + org.jboss.resteasy.spi.ResteasyProviderFactory.instance);
+   traceStack();
+ENDRULE
+
+
+RULE ResteasyProviderFactory#setInstance
+CLASS org.jboss.resteasy.spi.ResteasyProviderFactory
+METHOD setInstance
+AT LINE 97
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " provider factory is " + org.jboss.resteasy.spi.ResteasyProviderFactory.instance);
+   traceStack();
+ENDRULE
