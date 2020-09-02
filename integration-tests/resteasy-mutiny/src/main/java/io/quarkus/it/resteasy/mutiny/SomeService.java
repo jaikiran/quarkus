@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
+
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 
@@ -59,7 +61,10 @@ public class SomeService {
                 new Pet().setName("rex").setKind("mouse"))
                 .emitOn(executor)
                 .onCompletion().invoke(() -> System.out.println("Server Side - Completing stream"))
-                .onItem().invoke(it -> System.out.println("Server Side - Emitting " + it.getName()))
+                .onItem().invoke(it -> {
+                    System.out.println("Server Side - Emitting " + it.getName() + ", ResteasyProviderFactory = "
+                            + ResteasyProviderFactory.getInstance());
+                })
                 .onFailure().invoke(f -> System.out.println("Server Side - Failed with " + f))
                 .on().request(l -> System.out.println("Got request: " + l))
                 .onSubscribe().invoke(l -> System.out.println("Got subscription: " + l));

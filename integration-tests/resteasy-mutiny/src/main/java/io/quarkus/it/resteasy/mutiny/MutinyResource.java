@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.SseElementType;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -65,6 +66,7 @@ public class MutinyResource {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     public Multi<Pet> sse() {
+        System.out.println("/pets ResteasyProviderFactory = " + ResteasyProviderFactory.getInstance());
         return service.getMorePets();
     }
 
