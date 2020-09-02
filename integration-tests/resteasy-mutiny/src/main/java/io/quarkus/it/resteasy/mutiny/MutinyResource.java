@@ -9,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.annotations.SseElementType;
 
 import io.smallrye.mutiny.Multi;
@@ -69,21 +68,21 @@ public class MutinyResource {
         return service.getMorePets();
     }
 
-    @Inject
-    @RestClient
-    MyRestService client;
-
-    @GET
-    @Path("/client")
-    public Uni<String> callHello() {
-        return client.hello();
-    }
-
-    @GET
-    @Path("/client/pet")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Pet> callPet() {
-        return client.pet();
-    }
+    //    @Inject
+    //    @RestClient
+    //    MyRestService client;
+    //
+    //    @GET
+    //    @Path("/client")
+    //    public Uni<String> callHello() {
+    //        return client.hello();
+    //    }
+    //
+    //    @GET
+    //    @Path("/client/pet")
+    //    @Produces(MediaType.APPLICATION_JSON)
+    //    public Uni<Pet> callPet() {
+    //        return client.pet();
+    //    }
 
 }

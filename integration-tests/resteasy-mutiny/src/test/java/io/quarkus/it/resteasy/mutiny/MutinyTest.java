@@ -88,7 +88,6 @@ public class MutinyTest {
     public void testSSE() {
         Client client = ClientBuilder
                 .newClient()
-                //                .register(SseEventProvider.class, MessageBodyReader.class)
                 .register(new SseEventProvider(), MessageBodyReader.class, MessageBodyWriter.class);
 
         System.out.println(client.getConfiguration().isRegistered(SseEventProvider.class));
@@ -132,22 +131,22 @@ public class MutinyTest {
         }
     }
 
-    @Test
-    public void testClientReturningUni() {
-        get("/mutiny/client")
-                .then()
-                .body(is("hello"))
-                .statusCode(200);
-    }
-
-    @Test
-    public void testClientReturningUniOfPet() {
-        get("/mutiny/client/pet")
-                .then()
-                .contentType("application/json")
-                .body("name", is("neo"))
-                .body("kind", is("rabbit"))
-                .statusCode(200);
-    }
+    //    @Test
+    //    public void testClientReturningUni() {
+    //        get("/mutiny/client")
+    //                .then()
+    //                .body(is("hello"))
+    //                .statusCode(200);
+    //    }
+    //
+    //    @Test
+    //    public void testClientReturningUniOfPet() {
+    //        get("/mutiny/client/pet")
+    //                .then()
+    //                .contentType("application/json")
+    //                .body("name", is("neo"))
+    //                .body("kind", is("rabbit"))
+    //                .statusCode(200);
+    //    }
 
 }
