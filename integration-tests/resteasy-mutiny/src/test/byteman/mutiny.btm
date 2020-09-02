@@ -1,0 +1,66 @@
+
+
+RULE ResteasyProviderFactoryImpl#init1
+CLASS org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl
+METHOD <init>(javax.ws.rs.RuntimeType)
+AT EXIT
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " wrote " + $0.serverHelper.toString() + " to serverHelper of  " + $0);
+   traceStack();
+ENDRULE
+
+
+RULE ResteasyProviderFactoryImpl#init2
+CLASS org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl
+METHOD <init>(javax.ws.rs.RuntimeType, org.jboss.resteasy.spi.ResteasyProviderFactory)
+AT EXIT
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " wrote " + $0.serverHelper.toString() + " to serverHelper of  " + $0);
+   traceStack();
+ENDRULE
+
+
+
+RULE ResteasyProviderFactoryImpl#initialize
+CLASS org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl
+METHOD initialize
+AT EXIT
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " wrote " + $0.serverHelper.toString() + " to serverHelper of  " + $0);
+   traceStack();
+ENDRULE
+
+
+RULE ResteasyProviderFactoryImpl#getMessageBodyWriter
+CLASS org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl
+METHOD getMessageBodyWriter
+AT ENTRY
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " getMessageBodyWriter called on " + $0);
+   traceStack();
+ENDRULE
+
+
+RULE ResteasyProviderFactoryImpl#getServerMessageBodyWriters
+CLASS org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl
+METHOD getServerMessageBodyWriters
+AT ENTRY
+BIND currTime:java.util.Date = new java.util.Date();
+	currThread:java.lang.Thread = java.lang.Thread.currentThread();
+IF TRUE
+DO
+   traceln(currTime.toString() + "[" + currThread.toString() + "] " + " serverHelper is " + $0.serverHelper + " on " + $0);
+   traceStack();
+ENDRULE
